@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../firebase_options.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -76,15 +74,13 @@ class _RegisterViewState extends State<RegisterView> {
             child: const Text("Register Here!!"),
           ),
           TextButton(
-            onPressed: (){
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/login/',
-                    (route) => false,
-              );
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil('/login', (route) => false);
             },
             child: const Text("Login or Sign Up Here!!"),
-          )
-
+          ),
         ],
       ),
     );
