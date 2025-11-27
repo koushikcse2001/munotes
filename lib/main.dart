@@ -5,7 +5,7 @@ import 'package:mynotesh/views/login_view.dart';
 import 'package:mynotesh/views/register_view.dart';
 import 'package:mynotesh/views/verify_email_view.dart';
 import 'firebase_options.dart';
-import 'dart:developer';
+import 'dart:developer' as devtools show log;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +26,7 @@ void main() async {
       routes: {
         '/login': (context) => const LoginView(),
         '/register': (context) => const RegisterView(),
+        '/notes': (context) => const NotesView(),
       },
     ),
   );
@@ -51,7 +52,8 @@ class HomePage extends StatelessWidget {
                 return const VerifyEmailView();
               }
             } else {
-              return const VerifyEmailView();
+              //LoginView
+              return const NotesView();
             }
           default:
             return const CircularProgressIndicator();
@@ -78,7 +80,18 @@ class _NotesViewState extends State<NotesView> {
         title: const Text("Main UI"),
         actions: [
           PopupMenuButton<MenuAction>(
-            onSelected: (value) {},
+            onSelected: (value) async {
+              switch (value) {
+                case MenuAction.logout:
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil('/login', (route) => false);
+                  }
+              }
+            },
             itemBuilder: (context) {
               return const [
                 PopupMenuItem<MenuAction>(
@@ -93,4 +106,30 @@ class _NotesViewState extends State<NotesView> {
       body: const Text("Hello World"),
     );
   }
+}
+
+Future<bool> showLogOutDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Sign Out"),
+        content: const Text("Are you sure you want to sign out!!"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text("Cencel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text("Log Out"),
+          ),
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
 }
