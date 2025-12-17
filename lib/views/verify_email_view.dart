@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotesh/services/auth/auth_service.dart';
 import '../constants/routes.dart';
 
 class VerifyEmailView extends StatefulWidget {
@@ -22,16 +22,14 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           ),
           TextButton(
             onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
+              await AuthService.firebase().sendEmailVerification();
             },
             child: const Text("Send email verification"),
           ),
           //
           TextButton(
             onPressed: () async {
-              //akhane selo comment ar sob line
-              await FirebaseAuth.instance.signOut();
+              await AuthService.firebase().logOut();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 registerRoute, (route) => false,);
             },
@@ -43,10 +41,3 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   }
 }
 
-// final user = FirebaseAuth.instance.currentUser;
-// await user?.reload(); // ← VERY IMPORTANT
-// if (user != null && user.emailVerified) {
-// Navigator.of(context).pushReplacement(
-// MaterialPageRoute(builder: (context) => const NotesView()),
-// );
-// }
