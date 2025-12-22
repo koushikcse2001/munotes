@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mynotesh/services/auth/auth_service.dart';
 import 'package:mynotesh/views/login_view.dart';
-import 'package:mynotesh/views/notes_view.dart';
+import 'package:mynotesh/views/notes/new_note_view.dart';
+import 'package:mynotesh/views/notes/notes_view.dart';
 import 'package:mynotesh/views/register_view.dart';
 import 'package:mynotesh/views/verify_email_view.dart';
-import 'constants/routes.dart';
+import 'package:mynotesh/constants/routes.dart';
 
-void main() async {
+void main()  {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
@@ -26,6 +27,7 @@ void main() async {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
+        newNoteRoute: (context) => const NewNoteView(),
       },
     ),
   );
