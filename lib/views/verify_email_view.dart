@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotesh/services/auth/auth_service.dart';
+import 'package:mynotesh/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotesh/services/auth/bloc/auth_event.dart';
 import '../constants/routes.dart';
 
 class VerifyEmailView extends StatefulWidget {
@@ -21,17 +24,19 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             "If you haven't received a verification email yet,Resent it",
           ),
           TextButton(
-            onPressed: () async {
-              await AuthService.firebase().sendEmailVerification();
+            onPressed: () {
+              context.read<AuthBloc>().add(
+                const AuthEventSendEmailVerification(),
+              );
             },
             child: const Text("Send email verification"),
           ),
           //
           TextButton(
             onPressed: () async {
-              await AuthService.firebase().logOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                registerRoute, (route) => false,);
+              context.read<AuthBloc>().add(
+                const AuthEventLogOut(),
+              );
             },
             child: const Text("Restart"),
           ),
